@@ -1,0 +1,45 @@
+services:
+  db:
+    image: mariadb:${MARIADB_VERSION:-11.4}
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      MARIADB_DATABASE: ${DB_NAME:-wordpress}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wordpress_net
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  wordpress:
+    image: wordpress:${WORDPRESS_VERSION:-php8.3-apache}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    env_file:
+      - .env
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
+      WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX:-wp_}
+    ports:
+      - "${WORDPRESS_PORT:-8080}:80"
+    volumes:
+      - wp_data:/var/www/html
+    networks:
+      - wordpress_net
+
+volumes:
+  db_data:
+  wp_data:
+
+networks:
+  wordpress_net:
+    driver: bridge
