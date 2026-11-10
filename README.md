@@ -40,6 +40,7 @@ Main contents:
 | `.env.example` | Template for the `.env` file containing all required credentials (placeholders only) |
 | `.gitignore` | Excludes secrets (`.env`), database dumps, logs, virtual environments, and editor/OS files |
 | `README.md` | This documentation |
+| [`CHECKLIST.md`](CHECKLIST.md) | Project submission checklist (Developer Akademie) with all fulfilled requirements and tests |
 
 ## Quickstart
 
