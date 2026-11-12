@@ -1,0 +1,23 @@
+# Secrets / environment files
+.env
+.env.*
+!.env.example
+
+# Database dumps / backups
+*.sql
+*.sql.gz
+
+# Logs
+*.log
+
+# Python virtual environments
+.venv/
+venv/
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
