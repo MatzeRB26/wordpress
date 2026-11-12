@@ -56,7 +56,7 @@ This checklist is based on the submission requirements of the Developer Akademie
 - [x] Build args, environment variables, and shell variables follow the naming convention `UPPER_CASE_WITH_UNDERSCORE`
 - [x] Variables are always referenced with the `{}` notation: `${SOME_VAR_VALUE}` instead of `$SOME_VAR_VALUE`
 - [x] Default values are configured for environment variables where it makes sense (`${VAR:-default}`)
-- [x] Critical configuration such as passwords is not stored in the repository but passed into the containers via a `.env` file
+- [x] Critical configuration such as passwords is not stored in the repository but read from a local `.env` file and passed to each container explicitly via its `environment` block
 
 ### Testing
 
@@ -72,4 +72,5 @@ Tested on the cloud VM before submission:
 - Database healthcheck combined with `depends_on: condition: service_healthy` for a reliable startup order
 - Additional volume `wp_data`, so uploads, themes, plugins, and `wp-config.php` persist as well
 - Database port is not exposed to the host, only reachable within the internal network
-- Image versions and the published port are configurable via environment variables with defaults
+- Image versions are pinned in the compose file; the published port is configurable via an environment variable with a default
+- Each container only receives the variables it needs (no `env_file`)

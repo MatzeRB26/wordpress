@@ -1,11 +1,12 @@
 services:
   db:
-    image: mariadb:${MARIADB_VERSION:-11.4}
+    image: mariadb:11.4
     restart: unless-stopped
-    env_file:
-      - .env
     environment:
       MARIADB_DATABASE: ${DB_NAME:-wordpress}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}
     volumes:
       - db_data:/var/lib/mysql
     networks:
@@ -18,16 +19,16 @@ services:
       start_period: 30s
 
   wordpress:
-    image: wordpress:${WORDPRESS_VERSION:-php8.3-apache}
+    image: wordpress:php8.3-apache
     restart: unless-stopped
     depends_on:
       db:
         condition: service_healthy
-    env_file:
-      - .env
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_NAME: ${DB_NAME:-wordpress}
+      WORDPRESS_DB_USER: ${MARIADB_USER}
+      WORDPRESS_DB_PASSWORD: ${MARIADB_PASSWORD}
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX:-wp_}
     ports:
       - "${WORDPRESS_PORT:-8080}:80"
